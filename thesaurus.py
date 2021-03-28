@@ -36,7 +36,7 @@ def definition(word):
         data_keys = list(map(str.lower, data.keys()))
 
         # Lsit of max 5 elements with at least 75% similarity to the user word.
-        matches = GCM(word, data_keys, n=5, cutoff=0.75)  # matches_lowercase
+        matches = GCM(word, data_keys, n=5, cutoff=0.75)
 
         # This if statement activates if indeed there are some similar words.
         if len(matches) > 0:
