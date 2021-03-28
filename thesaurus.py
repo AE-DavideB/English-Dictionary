@@ -36,31 +36,17 @@ def definition(word):
         data_keys = list(map(str.lower, data.keys()))
 
         # Lsit of max 5 elements with at least 75% similarity to the user word.
-        matches   = GCM(word, data_keys, n=5, cutoff=0.75)
+        matches = GCM(word, data_keys, n=5, cutoff=0.75)  # matches_lowercase
 
         # This if statement activates if indeed there are some similar words.
         if len(matches) > 0:
-            # This for statement checks each element in matches and if the
-            # corresponding word in the dataset is in all-caps or capitalized,
-            # it rewrites it that way, otherwise it keeps the lower case style.
-            for i in range(len(matches)):
-                try:
-                    data[matches[i]]
-                except:
-                    try:
-                        data[matches[i].title()]
-                        matches[i] = matches[i].title()
-                    except:
-                        try:
-                            data[matches[i].upper()]
-                            matches[i] = matches[i].upper()
-                        except:
-                            data[matches[i]]
 
-            # Displaying similarities to the user so they can choose.
-            for i in range(len(matches)):
+            # This for statement replaces each word in "matches" with their
+            # original dataset format (since not all keys should be lowercased).
+            for i, match in enumerate(matches):
                 if i == 0:
                     print('')
+                matches[i] = GCM(match, data.keys(), n=5, cutoff=0.75)[0]
                 print(f'\t{i+1}---{matches[i]}')
 
             selection = input('\nEither enter one of the words above, a new word or type "exit!" to exit dictionary: ')
@@ -88,22 +74,21 @@ def definition(word):
     # definition was found.
     return word_definition
 
-# This ensures that the the code keeps asking the user if they want to enter a new word.
+# This ensures that the the program keeps asking the user to enter a new word.
 while True:
-    word    = input('Choose a word: ')
+    word = input('Choose a word: ')
     # Saving the function's outcome to make it available in the next lines.
     outcome = definition(word)
 
-    for i in range(len(outcome)):
-        if i>0: nt = '\t'
+    for i, line in enumerate(outcome):
+        if i > 0: nt = '\t'
         else: nt = ''
-        print(f'{nt}{outcome[i]}')
+        print(f'{nt}{line}')
 
     if outcome == ['Dictionary exited.\n']:
         break
     else:
         again = input('\nChoose another word? Y/N: ').lower()
-
         if again in ['n', 'no']:
             print('Dictionary exited.\n')
             break
